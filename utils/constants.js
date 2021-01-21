@@ -1,0 +1,5 @@
+module.exports.GOOGLE_SIGN_IN = "G"
+module.exports.FACEBOOK_SIGN_IN = "F"
+module.exports.UPDATE_IMAGE_WIDTH = "UPDATE_IMAGE_WIDTH"
+module.exports.UPDATE_IMAGE_HEIGHT = "UPDATE_IMAGE_HEIGHT"
+module.exports.UPDATE_GOOGLE_API_KEY = "UPDATE_GOOGLE_API_KEY"
