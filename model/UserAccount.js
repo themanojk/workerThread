@@ -15,6 +15,7 @@ const UserSchema = new Schema(
         },
         userId: {
             type: String,
+            ref: 'users',
             required: false,
         }
     },
@@ -23,4 +24,4 @@ const UserSchema = new Schema(
     }
 );
 
-module.exports = User = mongoose.model("user_accounts", UserSchema);
+module.exports = UserAccount = mongoose.model("user_accounts", UserSchema);

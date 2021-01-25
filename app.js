@@ -8,8 +8,8 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 
 var app = express();
-console.log("manoj", process.env.DB_HOST)
 // Mongodb connection 
+mongoose.set('debug', true)
 mongoose.connect(process.env.DB_HOST, function (err) {
   if (err) {
     console.log(err);

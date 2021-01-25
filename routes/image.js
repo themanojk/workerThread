@@ -1,9 +1,13 @@
 const storageService = require('../services/storageService.js');
-const storeImage = storageService.storeImage.single('file')
-const Fs = require('fs');
-const CsvReadableStream = require('csv-reader');
+const storeImage = storageService.storeImage.single('file');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 const User = require('../model/User');
+const UserAccount = require('../model/UserAccount');
+const Agent = require('../model/Agent');
+const PolicyCategory = require('../model/PolicyCategory');
+const PolicyCarrier = require('../model/PolicyCarrier');
+const PolicyInfo = require('../model/PolicyInfo');
+
 module.exports.setRoutes = function (app) {
 
     app.post('/uploadCSV', async (req, res) => {
@@ -27,18 +31,35 @@ module.exports.setRoutes = function (app) {
                         console.log(`Thread exiting, ${threads.size} running...`);
                         if (threads.size === 0) {
                             console.log("finished");
+
+                            res.status(200).json({ msg: 'Data processed successfully', filename: req.file.key });
                         }
                     })
-                    worker.on('message', async (data) => {
-                        console.log("incoing", data)
-                        let status = await User.insertMany(data);
+                    worker.on('message', async (message) => {
+                        console.log("incoming", message.type, message.data.length)
+                        if (message.type === 'user') {
+                            await User.insertMany(message.data)
+                        }
+                        if (message.type === 'userAccount') {
+                            await UserAccount.insertMany(message.data)
+                        }
+                        if (message.type === 'agents') {
+                            await Agent.insertMany(message.data)
+                        }
+                        if (message.type === 'policyCategory') {
+                            await PolicyCategory.insertMany(message.data)
+                        }
+                        if (message.type === 'company') {
+                            await PolicyCarrier.insertMany(message.data)
+                        }
+                        if (message.type === 'policyInfo') {
+                            await PolicyInfo.insertMany(message.data)
+                        }
                     });
                 }
             } catch (err) {
                 console.log(err)
             }
-
-            res.status(200).json({ msg: 'Image saved successfully', filename: req.file.key });
 
         })
     });

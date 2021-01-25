@@ -43,6 +43,11 @@ const UserSchema = new Schema(
       type: String,
       require: false
     },
+    agentId: {
+      type: String,
+      ref: "agents",
+      require: false
+    }
   },
   {
     timestamps: true,

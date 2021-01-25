@@ -3,17 +3,13 @@ const Schema = mongoose.Schema;
 const { v4: uuidv4 } = require('uuid');
 
 // Create Schema
-const PolicyCarrierSchema = new Schema(
+const AgentSchema = new Schema(
     {
         _id: {
             type: String,
             default: uuidv4()
         },
-        companyName: {
-            type: String,
-            required: false,
-        },
-        userId: {
+        agentName: {
             type: String,
             required: false,
         }
@@ -23,4 +19,4 @@ const PolicyCarrierSchema = new Schema(
     }
 );
 
-module.exports = PolicyCarrier = mongoose.model("policy_carriers", PolicyCarrierSchema);
+module.exports = Agent = mongoose.model("agents", AgentSchema);

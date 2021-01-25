@@ -23,4 +23,4 @@ const PolicyCategorySchema = new Schema(
     }
 );
 
-module.exports = User = mongoose.model("policy_categories", PolicyCategorySchema);
+module.exports = PolicyCategory = mongoose.model("policy_categories", PolicyCategorySchema);
