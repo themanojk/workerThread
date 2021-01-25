@@ -6,6 +6,11 @@ var logger = require('morgan');
 var routes = require('./routes/routes');
 var mongoose = require('mongoose');
 var cors = require('cors');
+var usage = require('usage');
+var spawn = require('child_process').spawn;;
+
+const CHECK_CPU_USAGE_INTERVAL = 1000 * 60 * 30; // every half hour
+const HIGH_CPU_USAGE_LIMIT = 70; // percentage
 
 var app = express();
 // Mongodb connection 
@@ -45,5 +50,25 @@ app.use(function (err, req, res, next) {
     res.status(500).json({ msg: "Something went wrong", err: err })
   }
 });
+
+
+autoRestart = setInterval(function () {
+  usage.lookup(process.pid, function (err, result) {
+    if (!err) {
+      if (result.cpu > HIGH_CPU_USAGE_LIMIT) {
+        console.log('restart due to high cpu usage');
+        process.on("exit", function () {
+          require("child_process").spawn(process.argv.shift(), process.argv, {
+            cwd: process.cwd(),
+            detached: true,
+            stdio: "inherit"
+          });
+        });
+        process.exit();
+      }
+    }
+  });
+}, CHECK_CPU_USAGE_INTERVAL);
+
 
 module.exports = app;
